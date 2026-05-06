@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STO Admiralty System Optimizer</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <h1>STO Admiralty System Optimizer</h1>
+            <div class="header-actions">
+                <button id="theme-toggle" class="theme-toggle">☀️ Light</button>
+                <button id="create-admiral" class="btn">Create Admiral</button>
+                <button id="delete-admiral" class="btn btn-danger">Delete Admiral</button>
+                <button id="about-btn" class="btn btn-small">About</button>
+                <button id="stats-btn" class="btn btn-small">Statistics</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <h3>Admirals</h3>
+                <div id="admiral-list" class="admiral-list"></div>
+            </aside>
+
+            <main class="content">
+                <div class="admiral-panel">
+                    <div class="admiral-header">
+                        <h2 id="admiral-name">New Admiral</h2>
+                        <div class="admiral-controls">
+                            <label>Faction:
+                                <select id="faction-select">
+                                    <option value="AllFactions">All Factions</option>
+                                    <option value="Federation">Federation</option>
+                                    <option value="Klingon">Klingon</option>
+                                    <option value="RomulanFed">Romulan (Fed)</option>
+                                    <option value="RomulanKDF">Romulan (KDF)</option>
+                                    <option value="Jem'Hadar (Fed)">Jem'Hadar (Fed)</option>
+                                    <option value="Jem'Hadar (KDF)">Jem'Hadar (KDF)</option>
+                                </select>
+                            </label>
+                            <label>Prioritize:
+                                <select id="ship-priority">
+                                    <option value="Active">Active Ships</option>
+                                    <option value="OneTime">One-Time Ships</option>
+                                    <option value="OnlyActive">Only Active</option>
+                                </select>
+                            </label>
+ 
+                        </div>
+                    </div>
+
+                    <div class="ship-counts">
+                        <div class="count-box">
+                            <div class="count-label">Active Ships</div>
+                            <div class="count-value" id="active-count">0</div>
+                        </div>
+                        <div class="count-box">
+                            <div class="count-label">Maintenance</div>
+                            <div class="count-value" id="maintenance-count">0</div>
+                        </div>
+                        <div class="count-box">
+                            <div class="count-label">One-Time</div>
+                            <div class="count-value" id="one-time-count">0</div>
+                        </div>
+                        <div class="count-box">
+                            <div class="count-label">Assignments</div>
+                            <div class="count-value" id="assignment-count">1</div>
+                        </div>
+                    </div>
+
+                    <div class="ship-sections">
+                        <div class="ship-section">
+                            <h4>Active Ships</h4>
+                            <div id="active-ships" class="ship-list"></div>
+                        </div>
+                        <div class="ship-section">
+                            <h4>Maintenance Ships</h4>
+                            <div id="maintenance-ships" class="ship-list"></div>
+                        </div>
+                        <div class="ship-section">
+                            <h4>One-Time Ships</h4>
+                            <div id="one-time-ships" class="ship-list"></div>
+                        </div>
+                    </div>
+
+                    <button id="browse-ships" class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:16px;font-size:15px">Browse Ships to Add</button>
+
+                    <div class="assignment-actions">
+                        <button id="plan-assignments" class="btn btn-primary">Plan</button>
+                        <button id="clear-assignments" class="btn btn-danger">Clear</button>
+                    </div>
+
+                    <div class="assignments-container" id="assignments-container"></div>
+
+                    <div class="solutions-container" id="solutions-container">
+                        <div class="no-solution">No solution calculated yet.</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/enums.js"></script>
+    <script src="js/swing.js"></script>
+    <script src="js/embedded-data.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/rewards.js"></script>
+    <script src="js/abilities.js"></script>
+    <script src="js/ruleparsers.js"></script>
+    <script src="js/csv.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/solver.js"></script>
+    <script src="js/persistence.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
