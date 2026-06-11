@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STO Admiralty System Optimizer</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1>
+                    <img src="https://sto-tools.org/keybind-manager/img/delta_64x64.png" alt="STO Tools Logo" class="app-logo" onerror="this.style.display='none'">
+                    <span>STO Admiralty System Optimizer</span>
+                </h1>
+            </div>
+            <div class="header-right">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" id="settingsBtn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                    <div class="dropdown-menu" id="settingsMenu">
+                        <button class="dropdown-item" id="themeToggleBtn">
+                            <i class="fas fa-moon"></i>
+                            <span id="themeToggleText">Dark Mode</span>
+                        </button>
+                        <button class="dropdown-item" id="aboutBtn">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About</span>
+                        </button>
+                        <button class="dropdown-item" id="statsBtn">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistics</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Profile Bar -->
+        <div class="profile-bar">
+            <div class="profile-selector">
+                <i class="fas fa-clipboard-list"></i>
+                <select id="admiral-select" title="Select Admiral">
+                    <!-- Populated by JavaScript -->
+                </select>
+                <span class="admiral-name-display" id="admiral-name">New Admiral</span>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn toolbar-btn-primary" id="create-admiral" title="New Admiral">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="toolbar-btn toolbar-btn-danger" id="delete-admiral" title="Delete Admiral">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="status-indicators">
+                <span class="status-indicator" title="Active Ships">
+                    <i class="fas fa-rocket"></i>
+                    <span id="active-count">0</span>
+                </span>
+                <span class="status-indicator" title="Maintenance Ships">
+                    <i class="fas fa-wrench"></i>
+                    <span id="maintenance-count">0</span>
+                </span>
+                <span class="status-indicator" title="One-Time Ships">
+                    <i class="fas fa-bolt"></i>
+                    <span id="one-time-count">0</span>
+                </span>
+            </div>
+            <div class="profile-info">
+                <div class="admiral-controls">
+                    <label>Faction:
+                        <select id="faction-select">
+                            <option value="AllFactions">All Factions</option>
+                            <option value="Federation">Federation</option>
+                            <option value="Klingon">Klingon</option>
+                            <option value="RomulanFed">Romulan (Fed)</option>
+                            <option value="RomulanKDF">Romulan (KDF)</option>
+                            <option value="Jem'Hadar (Fed)">Jem'Hadar (Fed)</option>
+                            <option value="Jem'Hadar (KDF)">Jem'Hadar (KDF)</option>
+                        </select>
+                    </label>
+                    <label>Prioritize:
+                        <select id="ship-priority">
+                            <option value="Active">Active Ships</option>
+                            <option value="OneTime">One-Time Ships</option>
+                            <option value="OnlyActive">Only Active</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content">
+                <div class="admiral-panel">
+                    <div class="ship-sections">
+                        <div class="ship-section">
+                            <h4><i class="fas fa-rocket"></i> Active Ships</h4>
+                            <div id="active-ships" class="ship-list"></div>
+                        </div>
+                        <div class="ship-section">
+                            <h4><i class="fas fa-wrench"></i> Maintenance Ships</h4>
+                            <div id="maintenance-ships" class="ship-list"></div>
+                        </div>
+                        <div class="ship-section">
+                            <h4><i class="fas fa-bolt"></i> One-Time Ships</h4>
+                            <div id="one-time-ships" class="ship-list"></div>
+                        </div>
+                    </div>
+
+                    <button id="browse-ships" class="btn btn-primary browse-ships-btn">
+                        <i class="fas fa-search"></i> Browse Ships to Add
+                    </button>
+
+                    <div class="assignment-actions">
+                        <button id="plan-assignments" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Plan
+                        </button>
+                        <button id="clear-assignments" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                    </div>
+
+                    <div class="assignments-container" id="assignments-container"></div>
+
+                    <div class="solutions-container" id="solutions-container">
+                        <div class="no-solution">
+                            <i class="fas fa-lightbulb"></i>
+                            <p>No solution calculated yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/enums.js"></script>
+    <script src="js/swing.js"></script>
+    <script src="js/embedded-data.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/rewards.js"></script>
+    <script src="js/abilities.js"></script>
+    <script src="js/ruleparsers.js"></script>
+    <script src="js/csv.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/solver.js"></script>
+    <script src="js/persistence.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

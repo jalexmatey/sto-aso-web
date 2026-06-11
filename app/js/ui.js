@@ -37,7 +37,7 @@ var renderShipList = function(containerId, ships, type) {
     if (!container) return;
     container.innerHTML = '';
     if (!ships || ships.length === 0) {
-        container.innerHTML = '<div style="padding:8px;color:#666;font-style:italic;font-size:12px">No ships</div>';
+        container.innerHTML = '<div style="padding:8px;color:var(--text-muted);font-style:italic;font-size:12px">No ships</div>';
         return;
     }
     for (var i = 0; i < ships.length; i++) {
@@ -52,16 +52,16 @@ var renderShipList = function(containerId, ships, type) {
             if (maintShip && maintShip.readyTime) {
                 var readyDate = new Date(maintShip.readyTime);
                 title = 'Ready at: ' + readyDate.toLocaleTimeString();
-                countdown = ' | <span class="maint-timer" data-ready="' + maintShip.readyTime + '" style="color:#ff9800">Calculating...</span>';
+                countdown = ' | <span class="maint-timer" data-ready="' + maintShip.readyTime + '" style="color:var(--warning)">Calculating...</span>';
             }
             div.innerHTML = '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' +
-                ship.getDisplayName() + '</span>' +
+                ship.getDisplayName() + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>' +
                 '<span class="ship-stats">' + ship.eng + '/' + ship.tac + '/' + ship.sci + '</span>' +
                 countdown;
             if (title) div.title = title;
         } else {
             div.innerHTML = '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' +
-                ship.getDisplayName() + '</span>' +
+                ship.getDisplayName() + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>' +
                 '<span class="ship-stats">' + ship.eng + '/' + ship.tac + '/' + ship.sci + '</span>';
         }
 
@@ -173,7 +173,7 @@ var renderAssignments = function(adm) {
                     '<div class="stat-box"><div class="stat-label">Event ENG</div><div class="stat-value" style="color:var(--accent)">' + (eventEng > 0 ? '+' : '') + eventEng + '</div></div>' +
                     '<div class="stat-box"><div class="stat-label">Event TAC</div><div class="stat-value" style="color:var(--accent)">' + (eventTac > 0 ? '+' : '') + eventTac + '</div></div>' +
                     '<div class="stat-box"><div class="stat-label">Event SCI</div><div class="stat-value" style="color:var(--accent)">' + (eventSci > 0 ? '+' : '') + eventSci + '</div></div>' +
-                    '<div class="stat-box"><div class="stat-label">Crit Rate</div><div class="stat-value" style="color:#ff9800">' + eventCrit + '</div></div>' +
+                    '<div class="stat-box"><div class="stat-label">Crit Rate</div><div class="stat-value" style="color:var(--warning)">' + eventCrit + '</div></div>' +
                 '</div>';
         }
 
@@ -183,7 +183,7 @@ var renderAssignments = function(adm) {
         var mantRed = a.eventMaintenanceReduction || 0;
 
         card.innerHTML +=
-            '<div class="assignment-stats" style="margin-top:6px;border-top:1px solid var(--border-color);padding-top:6px">' +
+            '<div class="assignment-stats" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px">' +
                 '<div class="stat-box"><div class="stat-label">Total ENG</div><div class="stat-value" style="color:var(--success)">' + totalEng + '</div></div>' +
                 '<div class="stat-box"><div class="stat-label">Total TAC</div><div class="stat-value" style="color:var(--success)">' + totalTac + '</div></div>' +
                 '<div class="stat-box"><div class="stat-label">Total SCI</div><div class="stat-value" style="color:var(--success)">' + totalSci + '</div></div>' +
@@ -320,7 +320,7 @@ var renderSolutions = function(solutions, assignment) {
             var ship = s.ships[k];
             if (ship) {
                 html += '<div class="solution-ship">';
-                html += '<span style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '</span>';
+                html += '<span style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>';
                 html += '<span>' + ship.eng + '/' + ship.tac + '/' + ship.sci + '</span>';
                 html += '</div>';
             }
@@ -361,7 +361,7 @@ var renderSolutions = function(solutions, assignment) {
 
                 if (effects.length > 0) {
                     html += '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:2px;padding-left:8px;">';
-                    html += '<span style="color:' + getRarityColor(ship.rarity) + '">' + bonus.shipName + '</span>: ' + effects.join(' | ');
+                    html += '<span style="color:' + getRarityColor(ship.rarity) + '">' + bonus.shipName + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>: ' + effects.join(' | ');
                     html += '</div>';
                 }
             }
@@ -519,7 +519,7 @@ var renderShipBrowser = function() {
 
         html += '<div class="browser-ship-item" data-id="' + ship.id + '" onclick="toggleShipSelect(this)">';
         html += '<input type="checkbox" class="ship-checkbox" data-id="' + ship.id + '" onclick="event.stopPropagation();" ' + (inActive || inMaint || inOneTime ? 'checked disabled' : '') + '>';
-        html += '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '</span>';
+        html += '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>';
         html += '<span class="ship-stats">' + getFactionString(ship.faction) + ' | ' + getRoleString(ship.role) + ' | ' + getTierString(ship.tier) + '</span>';
         html += '<span class="ship-stats">' + ship.eng + '/' + ship.tac + '/' + ship.sci + '</span>';
         if (status) html += '<span class="ship-stats" style="color:var(--accent)">' + status + '</span>';
@@ -594,7 +594,7 @@ var renderBrowserList = function() {
 
         div.innerHTML =
             '<input type="checkbox" class="ship-checkbox" data-id="' + ship.id + '" onclick="event.stopPropagation();" ' + (inActive || inMaint || inOneTime ? 'checked disabled' : '') + '>' +
-            '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '</span>' +
+            '<span class="ship-name" style="color:' + getRarityColor(ship.rarity) + '">' + ship.name + '<sup class="rarity-abbr">' + getRarityAbbrev(ship.rarity) + '</sup></span>' +
             '<span class="ship-stats">' + getFactionString(ship.faction) + ' | ' + getRoleString(ship.role) + ' | ' + getTierString(ship.tier) + '</span>' +
             '<span class="ship-stats">' + ship.eng + '/' + ship.tac + '/' + ship.sci + '</span>' +
             (status ? '<span class="ship-stats" style="color:var(--accent)">' + status + '</span>' : '');
@@ -733,9 +733,13 @@ var UI = {
         this.theme = theme;
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('sto-aso-theme', theme);
-        var btn = document.getElementById('theme-toggle');
-        if (btn) {
-            btn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        var icon = document.querySelector('#themeToggleBtn i');
+        var text = document.getElementById('themeToggleText');
+        if (icon) {
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        if (text) {
+            text.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
         }
     },
 
@@ -745,22 +749,16 @@ var UI = {
     },
 
     renderAdmiralList: function() {
-        var listEl = document.getElementById('admiral-list');
-        if (!listEl) return;
-        listEl.innerHTML = '';
+        var selectEl = document.getElementById('admiral-select');
+        if (!selectEl) return;
+        selectEl.innerHTML = '';
         for (var i = 0; i < this.admirals.admirals.length; i++) {
             var adm = this.admirals.admirals[i];
-            var div = document.createElement('div');
-            div.className = 'admiral-item' + (this.currentAdmiral === adm ? ' active' : '');
-            div.textContent = adm.name;
-            div.addEventListener('click', (function(a) {
-                return function() {
-                    UI.currentAdmiral = a;
-                    UI.currentSolutionIndex = 0;
-                    UI.render();
-                };
-            })(adm));
-            listEl.appendChild(div);
+            var option = document.createElement('option');
+            option.value = i;
+            option.textContent = adm.name;
+            option.selected = this.currentAdmiral === adm;
+            selectEl.appendChild(option);
         }
     },
 
@@ -778,7 +776,6 @@ var UI = {
         document.getElementById('active-count').textContent = activeShips.length;
         document.getElementById('maintenance-count').textContent = maintenanceShips.length;
         document.getElementById('one-time-count').textContent = oneTimeShips.length;
-         document.getElementById('assignment-count').textContent = '1';
 
         renderShipList('active-ships', activeShips, 'active');
         renderShipList('maintenance-ships', maintenanceShips, 'maintenance');
@@ -810,10 +807,23 @@ var UI = {
     },
 
     setupEventListeners: function() {
-        document.getElementById('theme-toggle').addEventListener('click', function() {
+        // Theme toggle
+        document.getElementById('themeToggleBtn').addEventListener('click', function() {
             UI.setTheme(UI.theme === 'dark' ? 'light' : 'dark');
+            document.querySelector('.dropdown').classList.remove('active');
         });
 
+        // Admiral select
+        document.getElementById('admiral-select').addEventListener('change', function() {
+            var index = parseInt(this.value);
+            if (!isNaN(index) && UI.admirals.admirals[index]) {
+                UI.currentAdmiral = UI.admirals.admirals[index];
+                UI.currentSolutionIndex = 0;
+                UI.render();
+            }
+        });
+
+        // Create admiral
         document.getElementById('create-admiral').addEventListener('click', function() {
             var name = prompt('Enter admiral name:');
             if (name && name.trim()) {
@@ -825,6 +835,7 @@ var UI = {
             }
         });
 
+        // Delete admiral
         document.getElementById('delete-admiral').addEventListener('click', function() {
             if (UI.admirals.admirals.length <= 1) {
                 alert('Cannot delete the last admiral.');
@@ -839,18 +850,19 @@ var UI = {
             }
         });
 
+        // Faction select
         document.getElementById('faction-select').addEventListener('change', function() {
             UI.currentAdmiral.faction = this.value;
             Persistence.saveAdmirals(UI.admirals);
         });
 
+        // Ship priority
         document.getElementById('ship-priority').addEventListener('change', function() {
             UI.currentAdmiral.shipPriority = ShipPriority[this.value];
             Persistence.saveAdmirals(UI.admirals);
         });
 
-  
-
+        // Browse ships
         document.getElementById('browse-ships').addEventListener('click', function() {
             UI.browseFilter = '';
             UI.browseFaction = 'All';
@@ -870,6 +882,7 @@ var UI = {
             renderShipBrowser();
         });
 
+        // Plan assignments
         document.getElementById('plan-assignments').addEventListener('click', function() {
             UI.currentAdmiral.validateShips();
             var assignShips = UI.currentAdmiral.getDeployableShips();
@@ -881,6 +894,7 @@ var UI = {
             UI.render();
         });
 
+        // Clear assignments
         document.getElementById('clear-assignments').addEventListener('click', function() {
             for (var i = 0; i < UI.currentAdmiral.numAssignments; i++) {
                 UI.currentAdmiral.assignments[i].clear();
@@ -889,16 +903,38 @@ var UI = {
             UI.render();
         });
 
-        document.getElementById('about-btn').addEventListener('click', function() {
-            alert('STO Admiralty System Optimizer v1.0\nBrowser port by AI');
+        // About button
+        document.getElementById('aboutBtn').addEventListener('click', function() {
+            alert('STO Admiralty System Optimizer v0.1.0\nBrowser port by jalexmatey');
+            document.querySelector('.dropdown').classList.remove('active');
         });
 
-        document.getElementById('stats-btn').addEventListener('click', function() {
+        // Stats button
+        document.getElementById('statsBtn').addEventListener('click', function() {
             var totalShips = Object.keys(Database.ships).length;
             var totalAssignments = Object.keys(Database.assignments).length;
             var totalEvents = Object.keys(Database.events).length;
             alert('Database:\n' + totalShips + ' ships\n' + totalAssignments + ' assignments\n' + totalEvents + ' events\n' +
                 Object.keys(Database.traits).length + ' traits');
+            document.querySelector('.dropdown').classList.remove('active');
+        });
+
+        // Settings dropdown toggle
+        document.getElementById('settingsBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.closest('.dropdown').classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown').forEach(function(dropdown) {
+                dropdown.classList.remove('active');
+            });
+        });
+
+        // Prevent dropdown menu clicks from closing
+        document.getElementById('settingsMenu').addEventListener('click', function(e) {
+            e.stopPropagation();
         });
     }
 };

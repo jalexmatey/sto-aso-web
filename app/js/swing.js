@@ -1,11 +1,22 @@
 function getRarityColor(rarity) {
     switch (rarity) {
-        case Rarity.Uncommon: return 'rgb(0,204,0)';
-        case Rarity.Rare: return 'rgb(0,153,255)';
-        case Rarity.VeryRare: return 'rgb(162,69,185)';
-        case Rarity.UltraRare: return 'rgb(109,101,188)';
-        case Rarity.Epic: return 'rgb(255,165,0)';
-        default: return 'rgb(255,255,255)';
+        case Rarity.Uncommon: return 'var(--rarity-uncommon)';
+        case Rarity.Rare: return 'var(--rarity-rare)';
+        case Rarity.VeryRare: return 'var(--rarity-veryrare)';
+        case Rarity.UltraRare: return 'var(--rarity-ultrarare)';
+        case Rarity.Epic: return 'var(--rarity-epic)';
+        default: return 'var(--text)';
+    }
+}
+
+function getRarityAbbrev(rarity) {
+    switch (rarity) {
+        case Rarity.Uncommon: return 'u';
+        case Rarity.Rare: return 'r';
+        case Rarity.VeryRare: return 'vr';
+        case Rarity.UltraRare: return 'ur';
+        case Rarity.Epic: return 'e';
+        default: return '';
     }
 }
 

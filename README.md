@@ -11,7 +11,8 @@ A browser-based port of the Sto-ASO desktop application for Star Trek Online. Op
 - **Maintenance system** — Track ships in maintenance with live countdown timers
 - **Ship browser** — Filter ships by faction, role, tier, and rarity
 - **Ship abilities** — Full special ability parsing (critical rating multipliers, maintenance reduction, event ignore, etc.)
-- **Dark/Light theme** — Toggle between dark and light modes
+- **Dark/Light theme** — Toggle between dark and light modes with theme-aware rarity colors
+- **Rarity abbreviations** — Ship names show a superscript rarity indicator (u, r, vr, ur, e)
 - **Persistent data** — Profiles saved to localStorage, ship icons to IndexedDB
 - **Import/Export** — Export and import active ships as text files
 - **Works offline** — All data bundled, no server required
@@ -21,8 +22,9 @@ A browser-based port of the Sto-ASO desktop application for Star Trek Online. Op
 ### Running Locally
 
 1. Clone or download this repository
-2. Open `browser-app/index.html` in a modern web browser
-3. The app works directly from `file://` — no server needed
+2. Open `index.html` in a modern web browser (the splash page)
+3. Click **Launch App** to enter the optimizer
+4. The app works directly from `file://` — no server needed
 
 ### Requirements
 
@@ -60,54 +62,20 @@ Use the **Import Assignments** button to load a `.csv` file of mission assignmen
 
 All game data is embedded in the application:
 
-- **Ships** — ~726 ships with ENG/TAC/SCI stats, factions, tiers, rarities, and special abilities
+- **Ships** — 797 ships with ENG/TAC/SCI stats, factions, tiers, rarities, and special abilities
 - **Assignments** — 222 mission assignments with rarity and stat requirements
 - **Events** — 40 event modifiers that affect mission stats
 - **Traits** — 132 ship traits with descriptions
 
-## Architecture
+## Updating Ship Data
 
-| Java Source | Browser Equivalent |
-|-------------|-------------------|
-| `ShipImpl.java` | `models.js` (Ship) |
-| `Assignment.java` | `models.js` (Assignment) |
-| `AdmAssignment.java` | `models.js` (AdmAssignment) |
-| `Solver.java` | `solver.js` |
-| `SpecialAbility*` | `abilities.js` |
-| `ruleparser/*` | `ruleparsers.js` |
-| `rewards/*` | `rewards.js` |
-| `Admiral.java` | `models.js` (Admiral) |
-| `Datastore.java` | `persistence.js` |
-| `ShipDatabaseParser.java` | `data.js` |
-| `AssignmentsParser.java` | `data.js` |
-| `EventsParser.java` | `data.js` |
-| `TraitsParser.java` | `data.js` |
-| `AdmiraltyConsole.java` | `ui.js` |
+Run the update script to pull the latest ship data from the STO Wiki:
 
-## File Structure
-
+```bash
+node scripts/update-ships.js
 ```
-browser-app/
-├── index.html          # Main HTML page
-├── css/
-│   └── styles.css      # App styles (dark/light themes)
-├── js/
-│   ├── main.js         # Entry point
-│   ├── enums.js        # Enums (Tier, Rarity, Faction, etc.)
-│   ├── swing.js        # Color constants, string converters
-│   ├── models.js       # Data models (Ship, Admiral, etc.)
-│   ├── rewards.js      # Reward implementations
-│   ├── abilities.js    # Special ability implementations
-│   ├── ruleparsers.js  # Regex-based ability parsers
-│   ├── csv.js          # Excel-style CSV parser
-│   ├── data.js         # Database singleton (ships, events, assignments, traits)
-│   ├── solver.js       # Core optimization algorithm
-│   ├── persistence.js  # localStorage + IndexedDB
-│   ├── ui.js           # Main UI controller
-│   └── embedded-data.js # Embedded CSV data (~148KB)
-└── data/
-    └── default.csv     # Default assignment data
-```
+
+This scrapes the STO Wiki Cargo API and regenerates `app/data/ships.csv` and `app/js/embedded-data.js`.
 
 ## Scoring
 
@@ -119,6 +87,10 @@ score = (scoreEng + scoreTac + scoreSci + scoreCritRate) / (eng + tac + sci)
 
 Each stat score is calculated based on how well the ships meet the assignment requirements. Deficits are penalized (x10 multiplier), and crit rate shortfalls use a x1 multiplier. The solver picks the combination with the **lowest** score (best fit).
 
+## Acknowledgments
+
+This project is a browser port of the original [Sto-ASO](https://github.com/intrinsical/sto-aso) Java desktop application and its [fork](https://github.com/laurinius/sto-aso) by laurinius. Grateful thanks to the original authors for their work.
+
 ## License
 
-Based on the original [Sto-ASO](https://github.com/intrinsical/sto-aso) and it's [fork](https://github.com/laurinius/sto-aso) Java application.
+See [LICENSE.md](LICENSE.md) for details.

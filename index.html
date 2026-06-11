@@ -4,117 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STO Admiralty System Optimizer</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 640px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+            filter: drop-shadow(0 0 20px rgba(59,130,246,0.3));
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #f1f5f9, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .version {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 0.8rem;
+            background: rgba(30,41,59,0.6);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .feature i {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            width: 1.2rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: #3b82f6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .launch-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+        }
+
+        .footer {
+            margin-top: 2.5rem;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+
+        .footer a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #94a3b8;
+        }
+
+        @media (max-width: 500px) {
+            .features { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <header class="header">
-            <h1>STO Admiralty System Optimizer</h1>
-            <div class="header-actions">
-                <button id="theme-toggle" class="theme-toggle">☀️ Light</button>
-                <button id="create-admiral" class="btn">Create Admiral</button>
-                <button id="delete-admiral" class="btn btn-danger">Delete Admiral</button>
-                <button id="about-btn" class="btn btn-small">About</button>
-                <button id="stats-btn" class="btn btn-small">Statistics</button>
-            </div>
-        </header>
-
-        <div class="main-content">
-            <aside class="sidebar">
-                <h3>Admirals</h3>
-                <div id="admiral-list" class="admiral-list"></div>
-            </aside>
-
-            <main class="content">
-                <div class="admiral-panel">
-                    <div class="admiral-header">
-                        <h2 id="admiral-name">New Admiral</h2>
-                        <div class="admiral-controls">
-                            <label>Faction:
-                                <select id="faction-select">
-                                    <option value="AllFactions">All Factions</option>
-                                    <option value="Federation">Federation</option>
-                                    <option value="Klingon">Klingon</option>
-                                    <option value="RomulanFed">Romulan (Fed)</option>
-                                    <option value="RomulanKDF">Romulan (KDF)</option>
-                                    <option value="Jem'Hadar (Fed)">Jem'Hadar (Fed)</option>
-                                    <option value="Jem'Hadar (KDF)">Jem'Hadar (KDF)</option>
-                                </select>
-                            </label>
-                            <label>Prioritize:
-                                <select id="ship-priority">
-                                    <option value="Active">Active Ships</option>
-                                    <option value="OneTime">One-Time Ships</option>
-                                    <option value="OnlyActive">Only Active</option>
-                                </select>
-                            </label>
- 
-                        </div>
-                    </div>
-
-                    <div class="ship-counts">
-                        <div class="count-box">
-                            <div class="count-label">Active Ships</div>
-                            <div class="count-value" id="active-count">0</div>
-                        </div>
-                        <div class="count-box">
-                            <div class="count-label">Maintenance</div>
-                            <div class="count-value" id="maintenance-count">0</div>
-                        </div>
-                        <div class="count-box">
-                            <div class="count-label">One-Time</div>
-                            <div class="count-value" id="one-time-count">0</div>
-                        </div>
-                        <div class="count-box">
-                            <div class="count-label">Assignments</div>
-                            <div class="count-value" id="assignment-count">1</div>
-                        </div>
-                    </div>
-
-                    <div class="ship-sections">
-                        <div class="ship-section">
-                            <h4>Active Ships</h4>
-                            <div id="active-ships" class="ship-list"></div>
-                        </div>
-                        <div class="ship-section">
-                            <h4>Maintenance Ships</h4>
-                            <div id="maintenance-ships" class="ship-list"></div>
-                        </div>
-                        <div class="ship-section">
-                            <h4>One-Time Ships</h4>
-                            <div id="one-time-ships" class="ship-list"></div>
-                        </div>
-                    </div>
-
-                    <button id="browse-ships" class="btn btn-primary" style="width:100%;padding:12px;margin-bottom:16px;font-size:15px">Browse Ships to Add</button>
-
-                    <div class="assignment-actions">
-                        <button id="plan-assignments" class="btn btn-primary">Plan</button>
-                        <button id="clear-assignments" class="btn btn-danger">Clear</button>
-                    </div>
-
-                    <div class="assignments-container" id="assignments-container"></div>
-
-                    <div class="solutions-container" id="solutions-container">
-                        <div class="no-solution">No solution calculated yet.</div>
-                    </div>
-                </div>
-            </main>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-space-shuttle"></i>
+        </div>
+        <h1>STO Admiralty System Optimizer</h1>
+        <div class="version">v0.1.0</div>
+        <p class="description">
+            Optimize your admiral's fleet for Star Trek Online's Admiralty system.
+            Find the best ship combinations for any mission assignment instantly.
+        </p>
+        <div class="features">
+            <div class="feature"><i class="fas fa-bolt"></i> Fast brute-force solver</div>
+            <div class="feature"><i class="fas fa-users"></i> Multi-profile support</div>
+            <div class="feature"><i class="fas fa-ship"></i> 797 ships with abilities</div>
+            <div class="feature"><i class="fas fa-clipboard-list"></i> 222 assignments</div>
+            <div class="feature"><i class="fas fa-wrench"></i> Maintenance tracking</div>
+            <div class="feature"><i class="fas fa-moon"></i> Dark &amp; light themes</div>
+            <div class="feature"><i class="fas fa-download"></i> Import / export fleets</div>
+            <div class="feature"><i class="fas fa-cloud"></i> Works offline</div>
+        </div>
+        <a href="app/index.html" class="launch-btn">
+            Launch App <i class="fas fa-arrow-right"></i>
+        </a>
+        <div class="footer">
+            Browser port by <strong>jalexmatey</strong> &middot;
+            Based on <a href="https://github.com/intrinsical/sto-aso">Sto-ASO</a>
         </div>
     </div>
-
-    <script src="js/enums.js"></script>
-    <script src="js/swing.js"></script>
-    <script src="js/embedded-data.js"></script>
-    <script src="js/models.js"></script>
-    <script src="js/rewards.js"></script>
-    <script src="js/abilities.js"></script>
-    <script src="js/ruleparsers.js"></script>
-    <script src="js/csv.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/solver.js"></script>
-    <script src="js/persistence.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>
