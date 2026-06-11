@@ -93,4 +93,4 @@ This project is a browser port of the original [Sto-ASO](https://github.com/intr
 
 ## License
 
-See [LICENSE.md](LICENSE.md) for details.
+See [LICENSE](LICENSE) for details.
